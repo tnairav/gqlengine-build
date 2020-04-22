@@ -1,0 +1,65 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v2
+      # - uses: actions/setup-haskell@v1
+      #   with:
+      #     ghc-version: '8.6.5' # Exact version of ghc to use
+      #     cabal-version: '3.0'
+      - run: |
+          wget https://raw.githubusercontent.com/haskell/ghcup/master/ghcup && chmod +x ghcup
+          export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
+          ./ghcup install 8.6.5 && ./ghcup set 8.6.5 && ./ghcup install-cabal # && cabal new-install cabal-install
+          git clone https://github.com/hasura/graphql-engine.git
+          cd graphql-engine/server
+          git checkout -b build v1.1.1
+          cabal v2-update
+          cabal v2-build
+          cp `find dist-newstyle/ -name graphql-engine -type f` .
+          strip graphql-engine
+      - uses: actions/cache@v1
+        with:
+          path: ~/.ghcup
+          key: ${{ runner.os }}-ghcup
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cabal
+          key: ${{ runner.os }}-cabal
+      - uses: actions/upload-artifact@v1
+        with:
+          name: artifacts-linux
+          path: graphql-engine/server/graphql-engine
+  build-osx:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          brew uninstall --ignore-dependencies libpq && brew install postgresql libpq
+          wget https://raw.githubusercontent.com/haskell/ghcup/master/ghcup && chmod +x ghcup
+          export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
+          ./ghcup install 8.6.5 && ./ghcup set 8.6.5 && ./ghcup install-cabal # && cabal new-install cabal-install
+          git clone https://github.com/hasura/graphql-engine.git
+          cd graphql-engine/server
+          git checkout -b build v1.1.1
+          cabal v2-update
+          cabal v2-build
+          cp `find dist-newstyle/ -name graphql-engine -type f` .
+          strip graphql-engine
+      - uses: actions/cache@v1
+        with:
+          path: ~/.ghcup
+          key: ${{ runner.os }}-ghcup
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cabal
+          key: ${{ runner.os }}-cabal
+      - uses: actions/upload-artifact@v1
+        with:
+          name: artifacts-darwin
+          path: graphql-engine/server/graphql-engine
+
