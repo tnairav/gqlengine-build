@@ -17,7 +17,7 @@ jobs:
           ./ghcup install 8.6.5 && ./ghcup set 8.6.5 && ./ghcup install-cabal # && cabal new-install cabal-install
           git clone https://github.com/hasura/graphql-engine.git
           cd graphql-engine/server
-          git checkout -b build v1.2.1
+          git checkout -b build v1.2.2
           cabal v2-update
           cabal v2-build
           cp `find dist-newstyle/ -name graphql-engine -type f` .
@@ -37,7 +37,7 @@ jobs:
           ./ghcup install 8.6.5 && ./ghcup set 8.6.5 && ./ghcup install-cabal # && cabal new-install cabal-install
           git clone https://github.com/hasura/graphql-engine.git
           cd graphql-engine/server
-          git checkout -b build v1.2.1
+          git checkout -b build v1.2.2
           cabal v2-update
           cabal v2-build
           cp `find dist-newstyle/ -name graphql-engine -type f` .
