@@ -3,10 +3,11 @@ name: build
 
 on:
   push:
+    branches:
       - master
   schedule:
     # nightly build
-    - cron: "30 22 * * *"
+    - cron: "0 14 * * *"
 
 jobs:
   build-linux:
