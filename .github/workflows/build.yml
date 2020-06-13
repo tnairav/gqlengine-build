@@ -26,6 +26,7 @@ jobs:
       - run: |
           wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-linux-ghcup && chmod +x ghcup
           export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
+          echo $PATH
           ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal && move ghcup ~/.ghcup/bin/
           # && cabal new-install cabal-install
           git clone https://github.com/hasura/graphql-engine.git
@@ -58,6 +59,7 @@ jobs:
           brew uninstall --ignore-dependencies libpq && brew install postgresql libpq
           wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-apple-darwin-ghcup && chmod +x ghcup
           export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
+          echo $PATH
           ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal && move ghcup ~/.ghcup/bin/
           # && cabal new-install cabal-install
           git clone https://github.com/hasura/graphql-engine.git
