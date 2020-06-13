@@ -1,49 +1,72 @@
 name: build
 
-on: [push, pull_request]
+
+on:
+  push:
+      - master
+  schedule:
+    # nightly build
+    - cron: "30 22 * * *"
 
 jobs:
   build-linux:
     timeout-minutes: 200
     runs-on: ubuntu-16.04
     steps:
+
+      - name: get latest release
+        id: latest_release
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hasura/graphql-engine
+          releases-only: true
+
       - uses: actions/checkout@v2
-      # - uses: actions/setup-haskell@v1
-      #   with:
-      #     ghc-version: '8.6.5' # Exact version of ghc to use
-      #     cabal-version: '3.0'
       - run: |
-          wget https://raw.githubusercontent.com/haskell/ghcup/master/ghcup && chmod +x ghcup
+          wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-linux-ghcup && chmod +x ghcup
           export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
-          ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal # && cabal new-install cabal-install
+          ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal && move ghcup ~/.ghcup/bin/
+          # && cabal new-install cabal-install
           git clone https://github.com/hasura/graphql-engine.git
           cd graphql-engine/server
-          git checkout -b build v1.2.2
+          git checkout -b build ${{ steps.latest_release.outputs.tag }}
           cabal v2-update
           cabal v2-build
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
+
       - uses: actions/upload-artifact@v1
         with:
           name: artifacts-linux
           path: graphql-engine/server/graphql-engine
+
   build-osx:
     timeout-minutes: 200
     runs-on: macos-latest
     steps:
+
+      - name: get latest release
+        id: latest_release
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hasura/graphql-engine
+          releases-only: true
+
       - uses: actions/checkout@v2
       - run: |
           brew uninstall --ignore-dependencies libpq && brew install postgresql libpq
-          wget https://raw.githubusercontent.com/haskell/ghcup/master/ghcup && chmod +x ghcup
+          wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-apple-darwin-ghcup && chmod +x ghcup
           export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
-          ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal # && cabal new-install cabal-install
+          ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal && move ghcup ~/.ghcup/bin/
+          # && cabal new-install cabal-install
           git clone https://github.com/hasura/graphql-engine.git
           cd graphql-engine/server
-          git checkout -b build v1.2.2
+          git checkout -b build ${{ steps.latest_release.outputs.tag }}
           cabal v2-update
           cabal v2-build
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
+
       - uses: actions/upload-artifact@v1
         with:
           name: artifacts-darwin
