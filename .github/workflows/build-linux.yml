@@ -1,0 +1,44 @@
+name: build
+
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    # nightly build
+    - cron: "0 20 * * *"
+
+jobs:
+  build-linux:
+    timeout-minutes: 200
+    runs-on: ubuntu-16.04
+    steps:
+
+      - name: get latest release
+        id: latest_release
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hasura/graphql-engine
+          releases-only: true
+
+      - uses: actions/checkout@v2
+      - run: |
+          wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-linux-ghcup && chmod +x ghcup
+          export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
+          echo $PATH
+          ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal && mv ghcup ~/.ghcup/bin/
+          # && cabal new-install cabal-install
+          git clone https://github.com/hasura/graphql-engine.git
+          cd graphql-engine/server
+          git checkout -b build ${{ steps.latest_release.outputs.tag }}
+          cabal v2-update
+          cabal v2-build
+          cp `find dist-newstyle/ -name graphql-engine -type f` .
+          strip graphql-engine
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: artifacts-linux
+          path: graphql-engine/server/graphql-engine
+
