@@ -33,7 +33,7 @@ jobs:
           cd graphql-engine/server
           git checkout -b build ${{ steps.latest_release.outputs.tag }}
           cabal v2-update
-          cabal v2-build
+          cabal v2-build --jobs=1
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
           mv graphql-engine graphql-engine-${{ steps.latest_release.outputs.tag }}
