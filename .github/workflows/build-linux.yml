@@ -7,7 +7,7 @@ on:
       - master
   schedule:
     # nightly build
-    - cron: "0 20 * * *"
+    - cron: "30 */2 * * *"
 
 jobs:
   build-linux:
