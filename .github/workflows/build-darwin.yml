@@ -37,7 +37,6 @@ jobs:
           cabal v2-build
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
-          mv graphql-engine graphql-engine-${{ steps.latest_release.outputs.tag }}-darwin
 
       - uses: actions/upload-artifact@v1
         with:
