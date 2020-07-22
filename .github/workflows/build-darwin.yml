@@ -29,7 +29,8 @@ jobs:
             ~/.cabal/store
             ~/.ghcup/bin
             ~/.ghcup/ghc
-          key: ${{ runner.os }}
+          key: ${{ runner.os }}-${{ hashFiles('cabal.project.freeze') }}
+          restore-keys: ${{ runner.os }}-
 
       - uses: actions/checkout@v2
       - run: |
