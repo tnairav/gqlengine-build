@@ -43,7 +43,7 @@ jobs:
           git checkout -b build ${{ steps.latest_release.outputs.tag }}
           cp cabal.project.ci cabal.project.local
           cabal v2-update
-          cabal v2-build
+          cabal v2-build -j
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
 
