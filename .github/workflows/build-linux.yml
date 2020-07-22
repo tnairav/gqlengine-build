@@ -33,6 +33,7 @@ jobs:
 
       - uses: actions/checkout@v2
       - run: |
+          apt install libkrb5-dev libssl-dev
           echo Building ${{ steps.latest_release.outputs.tag }}
           wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-linux-ghcup && chmod +x ghcup
           export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
