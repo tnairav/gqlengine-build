@@ -22,6 +22,15 @@ jobs:
           repository: hasura/graphql-engine
           releases-only: true
 
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cabal/packages
+            ~/.cabal/store
+            ~/.ghcup/bin
+            ~/.ghcup/ghc
+          key: ${{ runner.os }}
+
       - uses: actions/checkout@v2
       - run: |
           echo Building ${{ steps.latest_release.outputs.tag }}
