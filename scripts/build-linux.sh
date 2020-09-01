@@ -1,20 +1,5 @@
 #!/bin/bash
 
-export LANG=en_US.UTF-8
-export LC_COLLATE=C
-export LC_ALL="en_US.UTF-8"
-
-export LC_CTYPE="$LC_ALL"
-export LC_NUMERIC="$LC_ALL"
-export LC_TIME="$LC_ALL"
-export LC_MONETARY="$LC_ALL"
-export LC_MESSAGES="$LC_ALL"
-export LC_PAPER="$LC_ALL"
-export LC_NAME="$LC_ALL"
-export LC_ADDRESS="$LC_ALL"
-export LC_TELEPHONE="$LC_ALL"
-export LC_MEASUREMENT="$LC_ALL"
-export LC_IDENTIFICATION="$LC_ALL"
 
 export BUILD_VERSION=v1.3.1
 export GHC_VERSION=8.10.1
@@ -46,7 +31,25 @@ apt install --yes \
 
 echo 'en_US.UTF-8 UTF-8' | tee /etc/locale.gen
 locale-gen
+
+export LANG=en_US.UTF-8
+export LC_COLLATE=C
+export LC_ALL="en_US.UTF-8"
+
+export LC_CTYPE="$LC_ALL"
+export LC_NUMERIC="$LC_ALL"
+export LC_TIME="$LC_ALL"
+export LC_MONETARY="$LC_ALL"
+export LC_MESSAGES="$LC_ALL"
+export LC_PAPER="$LC_ALL"
+export LC_NAME="$LC_ALL"
+export LC_ADDRESS="$LC_ALL"
+export LC_TELEPHONE="$LC_ALL"
+export LC_MEASUREMENT="$LC_ALL"
+export LC_IDENTIFICATION="$LC_ALL"
+
 update-locale LC_ALL=$LC_ALL
+
 
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
