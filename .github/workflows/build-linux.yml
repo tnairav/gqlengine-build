@@ -49,7 +49,7 @@ jobs:
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: artifacts-linux
           path: graphql-engine/server/graphql-engine
