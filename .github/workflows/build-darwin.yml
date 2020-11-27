@@ -22,15 +22,15 @@ jobs:
           repository: hasura/graphql-engine
           releases-only: true
 
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cabal/packages
-            ~/.cabal/store
-            ~/.ghcup/bin
-            ~/.ghcup/ghc
-          key: ${{ runner.os }}-${{ hashFiles('cabal.project.freeze') }}
-          restore-keys: ${{ runner.os }}-
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ~/.cabal/packages
+      #       ~/.cabal/store
+      #       ~/.ghcup/bin
+      #       ~/.ghcup/ghc
+      #     key: ${{ runner.os }}-${{ hashFiles('cabal.project.freeze') }}
+      #     restore-keys: ${{ runner.os }}-
 
       - uses: actions/checkout@v2
       - run: |
