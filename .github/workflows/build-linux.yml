@@ -39,7 +39,7 @@ jobs:
           wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-linux-ghcup && chmod +x ghcup
           export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
           echo $PATH
-          ./ghcup install 8.10.1 && ./ghcup set 8.10.1 && ./ghcup install-cabal && mv ghcup ~/.ghcup/bin/ && ghcup upgrade
+          ./ghcup install 8.10.2 && ./ghcup set 8.10.2 && ./ghcup install-cabal && mv ghcup ~/.ghcup/bin/ && ghcup upgrade
           git clone https://github.com/hasura/graphql-engine.git
           cd graphql-engine/server
           git checkout -b build ${{ steps.latest_release.outputs.tag }}
