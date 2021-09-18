@@ -55,7 +55,9 @@ jobs:
           cabal new-build -j
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
-
+          
+          cd ..
+          git clean -xdn .
       - uses: actions/upload-artifact@v2
         with:
           name: artifacts-darwin
