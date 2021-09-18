@@ -37,16 +37,22 @@ jobs:
           brew install mysql-client mysql
           export PATH=$PATH:/usr/local/mysql/bin
           echo Building ${{ steps.latest_release.outputs.tag }}
+
+          # install ghc & cabal
           wget -O ghcup http://downloads.haskell.org/~ghcup/x86_64-apple-darwin-ghcup && chmod +x ghcup
           export PATH=~/.cabal/bin:~/.ghcup/bin:$PATH
           echo $PATH
-          ./ghcup install 8.10.2 && ./ghcup set 8.10.2 && ./ghcup install-cabal && mv ghcup ~/.ghcup/bin/ && ghcup upgrade
+          mv ghcup ~/.ghcup/bin/
+          ghcup install ghc 8.10.2
+          ghcup set ghc 8.10.2
+          ghcup install-cabal
+
           git clone https://github.com/hasura/graphql-engine.git
           cd graphql-engine/server
           git checkout -b build ${{ steps.latest_release.outputs.tag }}
           cp cabal.project.ci cabal.project.local
-          cabal v2-update
-          cabal v2-build -j
+          cabal new-update
+          cabal new-build -j
           cp `find dist-newstyle/ -name graphql-engine -type f` .
           strip graphql-engine
 
